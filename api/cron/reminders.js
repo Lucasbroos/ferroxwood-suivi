@@ -18,6 +18,7 @@ export default async function handler(req, res) {
     const { data: s, error: se } = await db.from('settings').select('*').eq('id', 1).single();
     if (se) throw se;
     const { data: leads, error: le } = await db.from('leads').select('*');
+    const { data: templates } = await db.from('email_templates').select('*');
     if (le) throw le;
 
     const t = todayBE();
@@ -26,7 +27,7 @@ export default async function handler(req, res) {
 
     if (s.auto_send && mailConfigured()) {
       for (const l of due) {
-        const { subject, body } = reminderTemplate(l, s);
+        const { subject, body } = reminderTemplate(l, s, templates || []);
         try { await sendLeadEmail(db, l, s, { subject, text: body, isReminder: true, author: 'Relance automatique' }); sent.push(l); }
         catch (e) { failed.push({ l, error: e.message }); }
       }

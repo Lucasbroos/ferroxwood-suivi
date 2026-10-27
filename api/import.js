@@ -12,10 +12,22 @@ export default async function handler(req, res) {
     const input = Array.isArray(body.leads) ? body.leads : [];
     if (input.length > 500) throw httpError(413, 'Maximum 500 leads par appel');
 
-    const rows = input.map(normalizeLead).filter(r => r.external_id);
+    const db = admin();
+    let rows = input.map(normalizeLead).filter(r => r.external_id);
+
+    // On écarte d'abord les leads déjà importés : sinon chaque tentative d'insertion
+    // consomme un numéro de dossier (FW-xxx) même quand elle est ignorée comme doublon.
+    const known = new Set();
+    const ids = [...new Set(rows.map(r => r.external_id))];
+    for (let i = 0; i < ids.length; i += 100) {
+      const { data: ex, error: exErr } = await db.from('leads').select('external_id').in('external_id', ids.slice(i, i + 100));
+      if (exErr) throw exErr;
+      (ex || []).forEach(x => known.add(x.external_id));
+    }
+    const seen = new Set();
+    rows = rows.filter(r => !known.has(r.external_id) && !seen.has(r.external_id) && seen.add(r.external_id));
     if (!rows.length) return res.json({ received: input.length, inserted: 0 });
 
-    const db = admin();
     // ignoreDuplicates : une ligne déjà importée (même external_id) n'est jamais écrasée,
     // donc les statuts saisis par Ferroxwood restent intacts.
     const { data, error } = await db.from('leads')

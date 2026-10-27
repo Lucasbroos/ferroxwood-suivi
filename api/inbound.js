@@ -89,7 +89,9 @@ export async function POST(request) {
     // 2. Contenu + pièces jointes
     const mail = await resendGet(`/emails/receiving/${d.email_id}`);
     const full = mail.text ? String(mail.text) : htmlToText(mail.html);
-    const body = stripQuoted(full).slice(0, 20000);
+    const body = stripQuoted(full)
+      .replace(/\[[^\]\n]{1,200}\.(jpe?g|png|gif|heic|heif|webp|pdf|docx?|xlsx?)\]/gi, '')   // repères « [photo.jpg] » des pièces jointes
+      .replace(/\n{3,}/g, '\n\n').trim().slice(0, 20000);
     const subject = String(mail.subject || d.subject || '(sans objet)').slice(0, 300);
 
     const stored = [], forwardFiles = [];
