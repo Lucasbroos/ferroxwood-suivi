@@ -8,8 +8,8 @@
  *   2. Ferroxwood > Synchroniser maintenant
  *   3. Ferroxwood > Activer la synchro auto (toutes les 10 min)
  *
- * Seules les nouvelles lignes sont envoyées (mémorisation de la dernière ligne traitée).
- * La plateforme ignore de toute façon les doublons.
+ * À chaque synchro, tout l'onglet est relu : la plateforme ignore les leads déjà importés,
+ * donc l'ordre des lignes (tri, insertion en haut) n'a pas d'importance.
  */
 
 const CONFIG = {
@@ -17,11 +17,15 @@ const CONFIG = {
   SECRET: 'COLLEZ_ICI_LA_VALEUR_DE_IMPORT_SECRET',
 
   // Un bloc par onglet. « tab » = nom exact de l'onglet, « source » = 'Meta' ou 'Site web'.
-  // Pour chaque champ : la liste des en-têtes possibles (casse et accents ignorés).
-  // Ajoutez simplement vos propres intitulés de colonnes dans les listes si besoin.
+  //
+  // Onglet SANS ligne d'en-têtes (les leads commencent en ligne 1) :
+  //   headerRow: 0  +  letters: { champ: 'lettre de colonne' }
+  // Onglet AVEC une ligne d'en-têtes :
+  //   headerRow: 1  (les colonnes sont reconnues par leur titre, voir COLUMNS plus bas)
   SHEETS: [
-    { tab: 'Meta', source: 'Meta', headerRow: 1 },
-    { tab: 'Website', source: 'Site web', headerRow: 1 },
+    { tab: 'Devis META', source: 'Meta', headerRow: 0,
+      letters: { created: 'B', name: 'M', phone: 'N', email: 'O', city: 'P', type: 'Q' } },
+    // { tab: 'Devis site web', source: 'Site web', headerRow: 1 },
   ],
 
   COLUMNS: {
@@ -76,6 +80,26 @@ function cellText(v) {
   return String(v == null ? '' : v).trim();
 }
 
+function colIndex(letter) {
+  let n = 0;
+  String(letter).toUpperCase().replace(/[^A-Z]/g, '').split('').forEach(c => { n = n * 26 + (c.charCodeAt(0) - 64); });
+  return n - 1;
+}
+function colLetter(i) { let s = ''; i++; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+
+function mapLetters(letters) {
+  const idx = {}, used = new Set();
+  Object.keys(letters || {}).forEach(f => { const i = colIndex(letters[f]); if (i >= 0) { idx[f] = i; used.add(i); } });
+  return { idx, used, noHeader: true };
+}
+
+function phoneFix(p) {
+  const d = String(p).replace(/[^\d+]/g, '');
+  if (/^32\d{8,9}$/.test(d)) return '+' + d;          // 32477… → +32477…
+  if (/^4\d{8}$/.test(d)) return '+32' + d;           // 477… (0 perdu par Sheets) → +32477…
+  return String(p).trim();
+}
+
 function buildLead(sheetCfg, headers, map, row) {
   const get = f => map.idx[f] == null ? '' : cellText(row[map.idx[f]]);
   const raw = {}, extra = [];
@@ -84,7 +108,7 @@ function buildLead(sheetCfg, headers, map, row) {
     const v = cellText(row[j]);
     if (!h || !v) return;
     raw[h] = v;
-    if (!map.used.has(j) && ignore.indexOf(norm(h)) < 0) extra.push(h.replace(/_/g, ' ') + ' : ' + v);
+    if (!map.noHeader && !map.used.has(j) && ignore.indexOf(norm(h)) < 0) extra.push(h.replace(/_/g, ' ') + ' : ' + v);
   });
   if (!Object.keys(raw).length) return null; // ligne vide
 
@@ -93,12 +117,13 @@ function buildLead(sheetCfg, headers, map, row) {
     const key = [sheetCfg.tab, get('email'), get('phone'), get('created') || JSON.stringify(raw)].join('|');
     id = Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, key)).slice(0, 22);
   }
-  const message = [get('message'), extra.join('\n')].filter(String).join('\n\n');
+  const message = [get('type') ? 'Projet : ' + get('type') : '', get('message'), extra.join('\n')].filter(String).join('\n\n');
+  if (!get('email') && !get('phone') && !get('name')) return null; // ligne sans contact
   return {
     external_id: sheetCfg.source + ':' + id,
     source: sheetCfg.source,
     name: get('name'), first_name: get('first_name'), last_name: get('last_name'),
-    email: get('email'), phone: get('phone'), city: get('city'),
+    email: get('email'), phone: get('phone') ? phoneFix(get('phone')) : '', city: get('city'),
     type: get('type'), message: message, budget: get('budget'), created: get('created'),
     raw: raw,
   };
@@ -107,16 +132,17 @@ function buildLead(sheetCfg, headers, map, row) {
 function readTab(sheetCfg, onlyNew) {
   const sh = SpreadsheetApp.getActive().getSheetByName(sheetCfg.tab);
   if (!sh) throw new Error('Onglet introuvable : « ' + sheetCfg.tab + ' »');
-  const last = sh.getLastRow(), hr = sheetCfg.headerRow || 1;
+  const last = sh.getLastRow(), hr = sheetCfg.headerRow == null ? 1 : Number(sheetCfg.headerRow);
   if (last <= hr) return { leads: [], lastRow: hr, headers: [], map: { idx: {} } };
-  const values = sh.getRange(hr, 1, last - hr + 1, sh.getLastColumn()).getValues();
-  const headers = values[0].map(h => String(h).trim());
-  const map = mapHeaders(headers);
+  const start = hr === 0 ? 1 : hr;
+  const values = sh.getRange(start, 1, last - start + 1, sh.getLastColumn()).getValues();
+  const headers = hr === 0 ? values[0].map((_, j) => colLetter(j)) : values[0].map(h => String(h).trim());
+  const map = hr === 0 ? mapLetters(sheetCfg.letters) : mapHeaders(headers);
   const props = PropertiesService.getScriptProperties();
   const from = onlyNew ? Number(props.getProperty('last_' + sheetCfg.tab) || hr) : hr;
   const leads = [];
   for (let r = Math.max(from, hr) + 1; r <= last; r++) {
-    const lead = buildLead(sheetCfg, headers, map, values[r - hr]);
+    const lead = buildLead(sheetCfg, headers, map, values[r - start]);
     if (lead) leads.push(lead);
   }
   return { leads, lastRow: last, headers, map };
@@ -140,11 +166,11 @@ function syncAll(silent) {
   const report = [];
   try {
     CONFIG.SHEETS.forEach(cfg => {
-      const t = readTab(cfg, true);
+      const t = readTab(cfg, !!cfg.incremental); // par défaut : tout l'onglet (les doublons sont ignorés)
       let inserted = 0;
       for (let i = 0; i < t.leads.length; i += 200) inserted += post(t.leads.slice(i, i + 200)).inserted;
       props.setProperty('last_' + cfg.tab, String(t.lastRow)); // n'avance qu'après un envoi réussi
-      report.push(cfg.tab + ' : ' + t.leads.length + ' ligne(s) envoyée(s), ' + inserted + ' nouvelle(s) demande(s)');
+      report.push(cfg.tab + ' : ' + t.leads.length + ' ligne(s) lue(s), ' + inserted + ' nouvelle(s) demande(s) importée(s)');
     });
   } finally { lock.releaseLock(); }
   if (!silent) SpreadsheetApp.getUi().alert(report.join('\n'));
@@ -158,7 +184,7 @@ function testMapping() {
   const out = [];
   CONFIG.SHEETS.forEach(cfg => {
     const t = readTab(cfg, false);
-    const found = Object.keys(t.map.idx).map(f => '  ' + f + ' ← « ' + t.headers[t.map.idx[f]] + ' »');
+    const found = Object.keys(t.map.idx).map(f => '  ' + f + ' ← ' + (t.map.noHeader ? 'colonne ' : '« ') + t.headers[t.map.idx[f]] + (t.map.noHeader ? '' : ' »'));
     const missing = ['email', 'phone'].filter(f => t.map.idx[f] == null);
     out.push('ONGLET ' + cfg.tab + ' (' + t.leads.length + ' lignes)\n' + found.join('\n') +
       (missing.length ? '\n  ⚠ non trouvé : ' + missing.join(', ') : '') +
