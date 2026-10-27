@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') throw httpError(405, 'POST uniquement');
     const db = admin();
     const user = await requireMember(req, db);
-    const { leadId, subject, body, isReminder } = await readJson(req);
+    const { leadId, subject, body, isReminder, isQuote } = await readJson(req);
     if (!leadId || !String(subject || '').trim() || !String(body || '').trim()) throw httpError(400, 'Objet et message requis');
 
     const [{ data: lead }, { data: s }] = await Promise.all([
@@ -17,7 +17,8 @@ export default async function handler(req, res) {
     if (!lead) throw httpError(404, 'Dossier introuvable');
 
     const reminder = !!isReminder && lead.status === 'Devis envoyé' && (lead.reminders || 0) < 2;
-    await sendLeadEmail(db, lead, s, { subject: String(subject).trim(), text: String(body), isReminder: reminder, author: user.email });
+    if (isQuote && (!lead.quote_ref || !lead.amount)) throw httpError(400, 'Enregistrez d’abord la référence et le montant du devis');
+    await sendLeadEmail(db, lead, s, { subject: String(subject).trim(), text: String(body), isReminder: reminder && !isQuote, isQuote: !!isQuote, author: user.email });
     res.json({ ok: true });
   } catch (e) { sendError(res, e); }
 }

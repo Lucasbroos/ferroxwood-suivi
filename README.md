@@ -74,6 +74,13 @@ Google Sheet ──(Apps Script, toutes les 10 min)──► /api/import ──�
 
 Le Sheet reste la porte d'entrée ; **les statuts vivent dans la plateforme** (une ligne déjà importée n'est jamais écrasée).
 
+## 4 bis. Gestion des utilisateurs
+
+1. Exécutez `supabase/migration-2-utilisateurs.sql` dans le SQL Editor (adaptez l'email admin à la fin).
+2. Dans la plateforme, menu **Utilisateurs** (visible par les admins) : ajouter une personne avec un mot de passe provisoire, changer son rôle, réinitialiser son mot de passe, retirer son accès.
+3. Rôles : **Administrateur** (tout, y compris utilisateurs et paramètres) · **Commercial** (demandes, devis, relances).
+4. Chacun peut changer son mot de passe via « Mon mot de passe » (en bas à gauche).
+
 ## 5. Premier test
 
 1. Ouvrez la plateforme, connectez-vous avec un email listé dans `members`.
@@ -94,3 +101,14 @@ Le Sheet reste la porte d'entrée ; **les statuts vivent dans la plateforme** (u
 - Sécurité : la base est fermée (RLS), seuls les emails de `members` voient les données. La clé `service_role` n'est utilisée que côté serveur.
 - RGPD : les modèles contiennent une phrase « répondez simplement à cet email » pour arrêter les relances ; pensez à mentionner le suivi des devis dans la politique de confidentialité de Ferroxwood.
 - Plus tard : brancher directement le webhook Meta Lead Ads et le formulaire du site sur `/api/import` (même format) pour se passer du Sheet.
+
+## 6. Réponses des clients dans la plateforme
+
+- Chaque email envoyé depuis la plateforme a une adresse de réponse propre au dossier : `fw42-xxxxxxxx@REPLY_DOMAIN`.
+- Resend reçoit la réponse (sous-domaine `reply.ferroxwood.be`, MX dédié) et appelle `POST /api/inbound` (webhook `email.received`, signature Svix).
+- La réponse + pièces jointes sont rangées dans le dossier (onglet « Échanges »), les relances s'arrêtent, statut « Échange en cours », copie envoyée à `FORWARD_TO` (ou `MAIL_REPLY_TO`) et au responsable.
+- Bouton « Envoyer le devis par email » : PDF joint, statut « Devis envoyé », relances programmées.
+
+Migrations : `supabase/migration-2-utilisateurs.sql` puis `supabase/migration-3-emails.sql`.
+
+Variables supplémentaires : `REPLY_DOMAIN`, `RESEND_WEBHOOK_SECRET`, `FORWARD_TO` (optionnel).
