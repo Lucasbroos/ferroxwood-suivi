@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ferroxwood — Demandes</title>
+<link rel="icon" href="logo-ferroxwood.png">
+<style>
+:root{--bg:#f4f3ef;--card:#fff;--ink:#222;--muted:#767a76;--line:#e6e4dc;--green:#355b45;--green2:#e3ece5;--sand:#f1d68a;--sand2:#fbf5e3;--orange:#b4672c;--orange2:#f8e9dc;--red:#a1453a;--red2:#f5e3e0;--dark:#222d27}
+*{box-sizing:border-box}html,body{margin:0}body{font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 14px}button:hover{background:#f3f4ef}button:disabled{opacity:.5;cursor:not-allowed}
+button.primary{background:var(--green);border-color:var(--green);color:#fff;font-weight:600}button.primary:hover{background:#2b4b39}button.big{padding:13px 20px;font-size:16px}
+button.ghost{border-color:transparent;background:transparent}button.danger{color:var(--red)}a{color:var(--green)}
+input,select,textarea{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:#fff;width:100%;max-width:100%}textarea{resize:vertical;min-height:110px;line-height:1.5}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--sand);outline-offset:1px}
+label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px}
+.hidden{display:none!important}.muted{color:var(--muted)}.small{font-size:13px}
+.top{background:var(--dark);color:#fff;position:sticky;top:0;z-index:20}.topin{max-width:1180px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:2px}.brand img{height:34px;background:var(--sand);border-radius:8px;padding:3px}
+.nav{display:flex;gap:4px;flex:1;overflow-x:auto}.nav button{background:transparent;border:0;color:#c9d2cb;padding:8px 12px;white-space:nowrap}.nav button.on{background:#3b4c41;color:#fff}
+.me{font-size:12px;color:#c9d2cb;display:flex;gap:8px;align-items:center;white-space:nowrap}.me button{background:transparent;border-color:#46544b;color:#c9d2cb;padding:5px 10px;font-size:12px}
+main{max-width:1180px;margin:0 auto;padding:26px 20px 80px}
+h1{font-size:28px;margin:0;letter-spacing:-.5px}h2{font-size:17px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.lhead{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}.lhead input{max-width:320px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}.tab{border-radius:999px;padding:8px 14px;background:#fff}.tab.on{background:var(--dark);border-color:var(--dark);color:#fff}.tab b{margin-left:6px;font-size:12px;opacity:.8}
+.hint{color:var(--muted);font-size:14px;margin:6px 0 16px}
+.rows{display:grid;gap:8px}.lead{display:grid;grid-template-columns:1fr auto;gap:12px;text-align:left;padding:15px 18px;border-radius:12px;background:#fff;width:100%}.lead:hover{border-color:#cfcabb;background:#fff}
+.lead .nm{font-weight:650;font-size:16px}.lead .pj{color:#444}.lead .mt{color:var(--muted);font-size:13px}.lead .rt{display:flex;flex-direction:column;align-items:flex-end;gap:6px;justify-content:center}
+.badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;background:#eef0ec;color:#55605a;white-space:nowrap}
+.b-new{background:var(--sand2);color:#8a6a12}.b-talk{background:#e6eef3;color:#3e6273}.b-sent{background:var(--orange2);color:var(--orange)}.b-won{background:var(--green2);color:var(--green)}.b-lost{background:var(--red2);color:var(--red)}.b-alert{background:var(--orange);color:#fff}.lead.hot{border-color:var(--orange);box-shadow:inset 4px 0 0 var(--orange)}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+.back{border:0;background:transparent;padding:4px 0;color:var(--muted);margin-bottom:10px}
+.fhead{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px}.eyebrow{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.contact{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.contact a{display:inline-flex;gap:6px;align-items:center;text-decoration:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:14px;color:var(--ink)}
+.next{background:var(--sand2);border:1px solid #ecdcae;border-radius:14px;padding:18px 20px;margin-bottom:20px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.next .step{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a6a12}.next p{margin:4px 0 0}.next .acts{display:flex;gap:8px;flex-wrap:wrap}
+.next.won{background:var(--green2);border-color:#c9dccd}.next.won .step{color:var(--green)}.next.lost{background:#f1efea;border-color:var(--line)}.next.lost .step{color:var(--muted)}
+.cols{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:20px;align-items:start}
+.conv{display:flex;flex-direction:column;gap:12px}.bub{max-width:86%;border-radius:14px;padding:12px 15px;border:1px solid var(--line);background:#fff}
+.bub.out{align-self:flex-end;background:var(--sand2);border-color:#ecdcae}.bub.first{background:#fff;border-style:dashed}
+.bub .bh{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);margin-bottom:4px}.bub .bh b{color:var(--ink)}
+.bub .sj{font-size:12px;color:var(--muted);margin-bottom:6px}.bub .tx{white-space:pre-wrap;word-wrap:break-word}.bub.unread{box-shadow:0 0 0 2px var(--orange)}
+.atts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.thumb{width:110px;height:110px;object-fit:cover;border-radius:9px;border:1px solid var(--line);background:#f2f2ee;display:block}
+.file{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;text-decoration:none;color:var(--ink);font-size:13px;max-width:100%}
+.composer{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px;margin-top:14px}.composer .crow{display:grid;grid-template-columns:minmax(0,240px) 1fr;gap:8px;margin-bottom:8px}
+.composer textarea{min-height:170px}.cbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.chip{display:inline-flex;gap:6px;align-items:center;background:var(--sand2);border:1px solid #ecdcae;border-radius:8px;padding:5px 10px;font-size:13px}
+details.card{padding:0}details.card>summary{list-style:none;cursor:pointer;padding:16px 20px;font-weight:650;display:flex;justify-content:space-between}details.card>summary::-webkit-details-marker{display:none}details.card>summary::after{content:'▾';color:var(--muted)}details.card[open]>summary{border-bottom:1px solid var(--line)}details.card .in{padding:16px 20px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.f2 .full{grid-column:1/-1}.stack{display:grid;gap:12px}
+.hist{font-size:13px;display:grid;gap:8px}.hist div{border-left:2px solid var(--line);padding-left:10px}.hist small{color:var(--muted)}
+dialog{border:0;border-radius:16px;padding:0;width:min(900px,96vw);max-height:94vh;box-shadow:0 30px 90px #0004}dialog::backdrop{background:#16201b99}
+.mh{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line);background:#f7f6f2;position:sticky;top:0;z-index:2}.mb{padding:20px 22px}
+.qlines{display:grid;gap:10px}.ql{display:grid;grid-template-columns:minmax(0,1fr) 72px 104px 116px 110px 34px;gap:8px;align-items:start}.ql textarea{min-height:46px}.ql .tot{padding-top:10px;text-align:right;font-weight:600}
+.qhead{font-size:12px;color:var(--muted)}.qtotals{margin-left:auto;width:min(340px,100%);display:grid;gap:6px;margin-top:16px}.qtotals div{display:flex;justify-content:space-between}.qtotals .grand{background:var(--dark);color:#fff;border-radius:9px;padding:9px 12px;font-weight:700}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:13px 20px;border-radius:10px;z-index:99;max-width:92vw;box-shadow:0 10px 30px #0003}
+.gate{min-height:100vh;display:grid;place-items:center;padding:20px}.gatecard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px;width:min(420px,100%)}.gatecard img{height:70px;background:var(--sand);border-radius:12px;padding:6px;margin-bottom:14px}
+.tpl{display:grid;gap:10px}.tplc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}.tplc .th{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.vars code{background:#efeee8;border-radius:5px;padding:1px 6px;font-size:12px;margin-right:4px}
+@media(max-width:900px){.cols{grid-template-columns:1fr}.ql{grid-template-columns:1fr 64px 96px 34px}.ql .u,.ql .tot{display:none}}
+@media(max-width:640px){.topin{flex-wrap:wrap;gap:8px;padding:8px 14px}.me span{display:none}main{padding:18px 14px 80px}h1{font-size:23px}.lead{grid-template-columns:1fr}.lead .rt{flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap}.f2{grid-template-columns:1fr}.composer .crow{grid-template-columns:1fr}.bub{max-width:96%}.lhead input{max-width:none}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+</head><body>
+<div id="gate" class="gate"><div class="gatecard" id="gateCard"><p class="muted">Chargement…</p></div></div>
+<div id="app" class="hidden">
+  <div class="top"><div class="topin"><div class="brand"><img src="logo-ferroxwood.png" alt=""><span>FERROXWOOD</span></div><nav class="nav" id="nav"></nav><div class="me" id="me"></div></div></div>
+  <main id="main"></main>
+</div>
+<dialog id="modal"><div id="modalC"></div></dialog>
+<div id="toast" class="toast hidden" role="status"></div>
+<script>
+'use strict';
+// ---------- utilitaires ----------
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const h=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=()=>new Date().toLocaleDateString('sv-SE',{timeZone:'Europe/Brussels'});
+const shift=(n,base=today())=>{const d=new Date(base+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+Number(n));return d.toISOString().slice(0,10)};
+const fdate=v=>v?new Date(String(v).slice(0,10)+'T12:00:00Z').toLocaleDateString('fr-BE',{timeZone:'UTC'}):'';
+const fdt=v=>v?new Date(v).toLocaleString('fr-BE',{timeZone:'Europe/Brussels',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+const eur=(v,dec=0)=>new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR',minimumFractionDigits:dec,maximumFractionDigits:dec}).format(Number(v)||0);
+const ago=iso=>{if(!iso)return'';const d=Math.round((new Date(today()+'T12:00:00Z')-new Date(String(iso).slice(0,10)+'T12:00:00Z'))/864e5);return d<=0?'aujourd’hui':d===1?'hier':d<30?`il y a ${d} j`:'le '+fdate(iso)};
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.add('hidden'),4500)}
+const isImg=n=>/\.(jpe?g|png|gif|webp|heic|heif)$/i.test(n||'');
+const nb=v=>Number(String(v??'').replace(',','.'))||0;
+
+// ---------- étapes ----------
+const ST={'Nouvelle demande':['Nouvelle','b-new'],'Échange en cours':['En discussion','b-talk'],'Devis envoyé':['Devis envoyé','b-sent'],'Devis accepté':['Gagné','b-won'],'Devis refusé':['Perdu','b-lost']};
+const stLabel=s=>(ST[s]||[s])[0], stBadge=s=>`<span class="badge ${(ST[s]||[])[1]||''}">${h(stLabel(s))}</span>`;
+const TABS=[
+  ['todo','À traiter',d=>d.status==='Nouvelle demande'||d.unread>0||d.waiting,'Réponses de clients et nouvelles demandes. Les clients qui ont répondu sont toujours en haut.'],
+  ['talk','En discussion',d=>d.status==='Échange en cours','Le client a été contacté : obtenez les infos, puis établissez le devis.'],
+  ['sent','Devis envoyés',d=>d.status==='Devis envoyé','En attente de réponse. Les relances partent automatiquement.'],
+  ['won','Gagnés',d=>d.status==='Devis accepté','Devis acceptés.'],
+  ['lost','Perdus',d=>d.status==='Devis refusé','Devis refusés ou projets abandonnés.'],
+  ['all','Tous',()=>true,'Toutes les demandes.']];
+const TYPES=['Portail','Garde-corps','Escalier','Porte','Terrasse suspendue','Carport','Mobilier','Autre'];
+const UNITS=['pièce','m','m²','forfait','heure'];
+
+// ---------- état ----------
+let sb,session=null,cfg={},me=null,team=[],db=[],templates=[],quotes=[],S={},lastLoad=0,users=null;
+let view='list',tab='todo',query='',current=null,compose={};
+const isAdmin=()=>me&&me.role==='admin';
+const byId=id=>db.find(d=>d.id===id);
+
+// Correspondance champs ↔ colonnes Supabase
+const MAP={name:'name',project:'project',type:'type',city:'city',source:'source',status:'status',received:'received_on',budget:'budget',message:'message',email:'email',phone:'phone',owner:'owner',amount:'amount',ref:'quote_ref',sent:'sent_on',notes:'notes',suspended:'suspended',reminders:'reminders',lastReminder:'last_reminder_on',reminderOverride:'reminder_override_on',pdfPath:'pdf_path',pdfName:'pdf_name',quoteId:'quote_id'};
+function fromRow(r){const d={id:r.id,number:r.number,createdAt:r.created_at};for(const[k,c]of Object.entries(MAP))d[k]=r[c]??(k==='suspended'?false:k==='reminders'?0:'');d.code='FW-'+String(r.number).padStart(3,'0');return d}
+function toDb(p){const o={};for(const[k,v]of Object.entries(p)){if(!(k in MAP))continue;let x=v;if(['budget','amount'].includes(k))x=v===''||v==null?null:Number(v);else if(['sent','lastReminder','reminderOverride','received'].includes(k))x=v||null;else if(k==='suspended')x=!!v;else if(k==='reminders')x=Number(v)||0;else if(typeof v==='string')x=v.trim()||null;o[MAP[k]]=x}if(o.name===null)delete o.name;if(o.project===null)delete o.project;o.updated_at=new Date().toISOString();return o}
+
+// Relance automatique : J+first après l'envoi du devis, puis +second, 2 maximum
+function due(d){if(d.status!=='Devis envoyé'||d.suspended||!d.sent||!d.email||d.reminders>=2)return'';return d.reminderOverride||(d.lastReminder?shift(S.second_delay||7,d.lastReminder):shift(S.first_delay||4,d.sent))}
+function tpl(t,d){const v={prenom:String(d.name||'').trim().split(/\s+/)[0]||'',nom:d.name,projet:d.project,type:String(d.type&&d.type!=='Autre'?d.type:'projet').toLowerCase(),ville:d.city,ref:d.ref,date_envoi:fdate(d.sent),montant:d.amount?eur(d.amount):'',signature:S.signature||''};return String(t||'').replace(/\{(\w+)\}/g,(m,k)=>k in v?(v[k]??''):m)}
+
+// ---------- Supabase ----------
+async function boot(){
+  try{cfg=await(await fetch('/api/config')).json()}catch(e){return gate('<h2>Configuration introuvable</h2><p class="muted">La route /api/config ne répond pas.</p>')}
+  if(!cfg.supabaseUrl||!cfg.supabaseAnonKey)return gate('<h2>Configuration incomplète</h2><p class="muted">Ajoutez SUPABASE_URL et SUPABASE_ANON_KEY sur Vercel puis redéployez.</p>');
+  sb=supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
+  session=(await sb.auth.getSession()).data.session;
+  sb.auth.onAuthStateChange((_e,s)=>{const was=!!session;session=s;if(!!s!==was)start()});
+  start();
+}
+async function start(){if(!session)return loginView();gate('<p class="muted">Chargement des demandes…</p>');await loadAll();if(!me)return deniedView();$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');render()}
+async function loadAll(){
+  const q=await Promise.all([
+    sb.from('settings').select('*').eq('id',1).maybeSingle(),
+    sb.from('leads').select('*').order('received_on',{ascending:false}).order('created_at',{ascending:false}),
+    sb.from('lead_events').select('lead_id,at,text,author').order('at',{ascending:false}).limit(8000),
+    sb.from('members').select('*'),
+    sb.from('lead_messages').select('*').order('at',{ascending:true}).limit(8000),
+    sb.from('email_templates').select('*').order('position').order('id'),
+    sb.from('quotes').select('*').order('created_at',{ascending:false})]);
+  const[s,l,e,m,msg,t,qt]=q;
+  const err=q.find(x=>x.error);if(err)toast('Erreur de chargement : '+err.error.message+(/does not exist|schema cache/i.test(err.error.message)?' (migration SQL manquante ?)':''));
+  S=s.data||{};team=m.data||[];me=team.find(x=>x.email===String(session.user.email).toLowerCase())||null;
+  templates=t.data||[];quotes=qt.data||[];
+  const ev=e.data||[],ms=msg.data||[];
+  db=(l.data||[]).map(r=>{const d=fromRow(r);d.history=ev.filter(x=>x.lead_id===d.id);d.messages=ms.filter(x=>x.lead_id===d.id);d.unread=d.messages.filter(x=>x.direction==='in'&&!x.read).length;const last=d.messages[d.messages.length-1];d.waiting=!!last&&last.direction==='in'&&!['Devis accepté','Devis refusé'].includes(d.status);d.lastAt=last?last.at:(d.createdAt||d.received);return d});
+  lastLoad=Date.now();
+}
+async function persist(d,patch,log){
+  const{error}=await sb.from('leads').update(toDb(patch)).eq('id',d.id);
+  if(error){toast('Erreur : '+error.message);return false}
+  Object.assign(d,patch);
+  if(log){await sb.from('lead_events').insert({lead_id:d.id,text:log,author:session.user.email});d.history.unshift({at:new Date().toISOString(),text:log,author:session.user.email})}
+  return true;
+}
+async function api(path,body){const t=(await sb.auth.getSession()).data.session?.access_token||'';const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+t},body:JSON.stringify(body||{})});const j=await r.json().catch(()=>({}));if(!r.ok)throw Error(j.error||('Erreur '+r.status));return j}
+
+// ---------- connexion ----------
+function gate(html){$('#app').classList.add('hidden');$('#gate').classList.remove('hidden');$('#gateCard').innerHTML='<img src="logo-ferroxwood.png" alt="Ferroxwood">'+html}
+function loginView(magic=false){
+  gate(`<h2>Connexion</h2><form id="lf" class="stack"><input type="email" name="email" required autocomplete="email" placeholder="vous@exemple.be">${magic?'<p class="muted small">Vous recevrez un lien de connexion par email.</p>':'<input type="password" name="password" required autocomplete="current-password" placeholder="Mot de passe">'}<button class="primary big">${magic?'Recevoir le lien':'Se connecter'}</button></form><p class="muted small" id="lm"></p><p><a href="#" id="ls" class="small">${magic?'← Avec un mot de passe':'Pas de mot de passe ? Recevoir un lien par email'}</a></p>`);
+  $('#ls').onclick=e=>{e.preventDefault();loginView(!magic)};
+  $('#lf').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target),email=f.get('email').trim().toLowerCase(),b=e.target.querySelector('button');b.disabled=true;
+    if(magic){const{error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+location.pathname,shouldCreateUser:false}});b.disabled=false;$('#lm').textContent=error?'Impossible d’envoyer le lien : '+error.message:'Lien envoyé à '+email+'.';return}
+    const{error}=await sb.auth.signInWithPassword({email,password:f.get('password')});b.disabled=false;if(error)$('#lm').textContent=/invalid/i.test(error.message)?'Email ou mot de passe incorrect.':'Erreur : '+error.message}}
+function deniedView(){gate(`<h2>Accès non autorisé</h2><p class="muted">Le compte ${h(session.user.email)} n’a pas encore accès. Demandez à un administrateur de vous ajouter.</p><button id="lo2">Se déconnecter</button>`);$('#lo2').onclick=()=>sb.auth.signOut()}
+
+// ---------- rendu ----------
+function nav(){
+  const items=[['list','Demandes'],['templates','Modèles d’emails']].concat(isAdmin()?[['users','Utilisateurs'],['settings','Paramètres']]:[]);
+  const todo=db.filter(TABS[0][2]).length;
+  $('#nav').innerHTML=items.map(([k,l])=>`<button data-nav="${k}" class="${(view===k||(view==='lead'&&k==='list'))?'on':''}">${l}${k==='list'&&todo?` <span class="badge b-alert">${todo}</span>`:''}</button>`).join('');
+  $('#me').innerHTML=`<span>${h(me.name||me.email)}</span><button id="myPwd">Mot de passe</button><button id="logout">Déconnexion</button>`;
+  $$('[data-nav]').forEach(b=>b.onclick=()=>{view=b.dataset.nav;current=null;compose={};render();scrollTo(0,0)});
+  $('#logout').onclick=()=>sb.auth.signOut();$('#myPwd').onclick=myPassword;
+}
+function render(){nav();
+  if(view==='lead'&&byId(current))return renderLead();
+  if(view==='templates')return renderTemplates();
+  if(view==='settings'&&isAdmin())return renderSettings();
+  if(view==='users'&&isAdmin())return renderUsers();
+  view='list';renderList();
+}
+
+// ---------- liste ----------
+function renderList(){
+  const T=TABS.find(t=>t[0]===tab)||TABS[0];
+  const ql=query.toLowerCase();
+  const rows=db.filter(T[2]).filter(d=>!ql||[d.name,d.project,d.city,d.email,d.phone,d.ref,d.code].join(' ').toLowerCase().includes(ql))
+    .sort((a,b)=>((b.unread>0)-(a.unread>0))||(b.waiting-a.waiting)||String((b.unread||b.waiting)?b.lastAt:b.received+b.createdAt).localeCompare((a.unread||a.waiting)?a.lastAt:a.received+a.createdAt));
+  $('#main').innerHTML=`<div class="lhead"><h1>Demandes</h1><div style="display:flex;gap:8px;flex:1;justify-content:flex-end;min-width:260px"><input id="q" type="search" placeholder="Rechercher un nom, une ville, un devis…" value="${h(query)}"><button class="primary" id="add">+ Ajouter</button></div></div>
+  <div class="tabs">${TABS.map(([k,l,f])=>`<button class="tab ${k===tab?'on':''}" data-tab="${k}">${l}<b>${db.filter(f).length}</b></button>`).join('')}</div>
+  <p class="hint">${T[3]}</p>
+  <div class="rows">${rows.length?rows.map(rowHtml).join(''):'<div class="card empty">Rien ici pour le moment.</div>'}</div>`;
+  $$('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderList()});
+  $('#q').oninput=e=>{query=e.target.value;const p=e.target.selectionStart;renderList();$('#q').focus();$('#q').setSelectionRange(p,p)};
+  $('#add').onclick=addLead;
+  $$('[data-open]').forEach(b=>b.onclick=()=>openLead(b.dataset.open));
+}
+function rowHtml(d){
+  const badges=[];
+  if(d.unread)badges.push(`<span class="badge b-alert">✉ Nouvelle réponse · ${fdt(d.lastAt)}</span>`);
+  else if(d.waiting)badges.push(`<span class="badge b-sent">↩ À répondre · ${fdt(d.lastAt)}</span>`);
+  badges.push(stBadge(d.status));
+  if(d.status==='Devis envoyé'){const du=due(d);badges.push(`<span class="muted small">${h(d.ref)} · ${eur(d.amount)}${du?` · relance le ${fdate(du)}`:''}</span>`)}
+  else if(d.status==='Devis accepté'&&d.amount)badges.push(`<span class="muted small">${eur(d.amount)}</span>`);
+  return `<button class="lead ${d.unread||d.waiting?'hot':''}" data-open="${d.id}"><div><div class="nm">${h(d.name)}</div><div class="pj">${h(d.project)}</div><div class="mt">${h(d.source)} · reçue ${ago(d.received)}${d.owner&&d.owner!=='Ferroxwood'?' · '+h(d.owner):''}</div></div><div class="rt">${badges.join('')}</div></button>`;
+}
+
+// ---------- fiche ----------
+function openLead(id){view='lead';current=id;compose={};render();scrollTo(0,0)}
+const quoteOf=d=>quotes.find(q=>q.id===d.quoteId)||quotes.find(q=>q.lead_id===d.id)||null;
+function nextStep(d){
+  const ack=templates.find(t=>t.kind==='accuse');
+  const noMail=!d.email?'<br><span class="small" style="color:var(--red)">⚠ Pas d’email pour ce client : ajoutez-le dans « Infos client ».</span>':'';
+  const q=quoteOf(d);
+  if(d.status==='Nouvelle demande')return `<div class="next"><div><div class="step">Étape 1 · Nouvelle demande</div><p>Remerciez le client et proposez-lui un appel.${noMail}</p></div><div class="acts">${d.phone?`<a href="tel:${h(d.phone.replace(/[^+\d]/g,''))}"><button>📞 Appeler</button></a>`:''}<button class="primary big" data-act="ack" ${!d.email||!ack?'disabled':''}>✉ Envoyer l’accusé de réception</button></div><div style="flex-basis:100%;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px solid #ecdcae;padding-top:12px"><span class="small muted">Déjà en contact par téléphone ou ailleurs ?</span><button class="small" data-act="talk">Passer en discussion</button><button class="small" data-act="quote">📄 Établir le devis directement</button></div></div>`;
+  if(d.status==='Échange en cours')return `<div class="next"><div><div class="step">Étape 2 · En discussion</div><p>${q?`Devis ${h(q.number)} préparé (${eur(q.total_tvac,2)}), pas encore envoyé.`:'Quand vous avez les infos (photos, mesures), établissez le devis.'}${noMail}</p></div><div class="acts"><button data-act="write">✉ Écrire au client</button><button class="primary big" data-act="quote">${q?'Reprendre le devis':'Établir le devis'}</button></div></div>`;
+  if(d.status==='Devis envoyé'){const du=due(d);const rel=d.suspended?'Relances arrêtées.':d.reminders>=2?'Les 2 relances ont été envoyées.':du?`Relance automatique le <b>${fdate(du)}</b> (${d.reminders+1}/2).`:'';
+    return `<div class="next"><div><div class="step">Étape 3 · Devis envoyé le ${fdate(d.sent)}</div><p><b>${h(d.ref)} · ${eur(d.amount,2)}</b> — ${rel}</p></div><div class="acts"><a class="hidden" id="pdfA" target="_blank" rel="noopener"><button>📄 Voir le devis</button></a><button data-act="quote">Modifier / renvoyer</button><button data-act="lost" class="danger">Refusé</button><button class="primary big" data-act="won">✓ Devis accepté</button></div></div>`}
+  if(d.status==='Devis accepté')return `<div class="next won"><div><div class="step">Gagné 🎉</div><p>${h(d.ref)} · <b>${eur(d.amount,2)}</b></p></div><div class="acts"><a class="hidden" id="pdfA" target="_blank" rel="noopener"><button>📄 Voir le devis</button></a><button data-act="reopen">Rouvrir</button></div></div>`;
+  return `<div class="next lost"><div><div class="step">Perdu</div><p>Dossier clôturé.</p></div><div class="acts"><button data-act="reopen">Rouvrir</button></div></div>`;
+}
+function convHtml(d){
+  const items=[];
+  if(d.message)items.push(`<div class="bub first"><div class="bh"><b>Demande initiale · ${h(d.source)}</b><span>${fdate(d.received)}</span></div><div class="tx">${h(d.message)}</div></div>`);
+  for(const m of d.messages){const inn=m.direction==='in';
+    const atts=(m.attachments||[]).map(a=>a.path
+      ?(isImg(a.name)?`<a data-sign="pieces" data-path="${h(a.path)}" target="_blank" rel="noopener" title="${h(a.name)}"><img class="thumb" alt="${h(a.name)}"></a>`:`<a class="file" data-sign="pieces" data-path="${h(a.path)}" target="_blank" rel="noopener">📎 ${h(a.name)}</a>`)
+      :(/\.pdf$/i.test(a.name)&&d.pdfPath?`<a class="file" data-sign="devis" data-path="${h(d.pdfPath)}" target="_blank" rel="noopener">📄 ${h(a.name)}</a>`:`<span class="file">📎 ${h(a.name)}</span>`)).join('');
+    const who=inn?h(d.name):'Ferroxwood'+(m.author?' · '+h(String(m.author).split('@')[0]):'');
+    items.push(`<div class="bub ${inn?'in':'out'} ${inn&&!m.read?'unread':''}"><div class="bh"><b>${who}</b><span>${fdt(m.at)}</span></div>${m.subject?`<div class="sj">${h(m.subject)}</div>`:''}<div class="tx">${h(m.body||'')}</div>${atts?`<div class="atts">${atts}</div>`:''}${inn?`<div style="margin-top:8px"><button class="small" data-reply="${m.id}">↩ Répondre</button></div>`:''}</div>`)}
+  if(!items.length)items.push('<p class="muted">Aucun échange pour l’instant.</p>');
+  return items.join('');
+}
+function composerHtml(d){
+  const can=cfg.mail&&d.email;
+  const groups=[['accuse','Accusés de réception'],['libre','Messages'],['devis','Devis'],['relance1','Relances'],['relance2','Relances']];
+  const opts=groups.map(([k,l])=>{const ts=templates.filter(t=>t.kind===k);return ts.length?`<optgroup label="${h(l)}">${ts.map(t=>`<option value="${t.id}" ${String(compose.tplId)===String(t.id)?'selected':''}>${h(t.name)}</option>`).join('')}</optgroup>`:''}).join('');
+  return `<div class="composer" id="composer"><div class="crow"><select id="cTpl"><option value="">Choisir un modèle…</option>${opts}</select><input id="cSub" placeholder="Objet" value="${h(compose.subject||'')}"></div>
+    <textarea id="cBody" placeholder="Écrivez au client…">${h(compose.body||'')}</textarea>
+    <div class="cbar"><div>${compose.quote&&d.pdfName?`<span class="chip">📄 ${h(d.pdfName)} joint</span> `:''}<span class="muted small">À : ${h(d.email||'—')}</span></div><div style="display:flex;gap:8px">${compose.quote?'<button id="cCancelQ" class="ghost small">Ne pas joindre le devis</button>':''}<button class="primary" id="cSend" ${can?'':'disabled'}>${compose.quote?'Envoyer le devis':'Envoyer'}</button></div></div>
+    ${!cfg.mail?'<p class="small muted">L’envoi d’emails n’est pas configuré.</p>':''}</div>`;
+}
+function infoHtml(d){
+  const owners=[...new Set(['Ferroxwood',...team.map(m=>m.name||m.email),d.owner].filter(Boolean))];
+  return `<details class="card"><summary>Infos client · modifier</summary><div class="in"><form id="infoF" class="f2">
+    <div class="full"><label>Nom</label><input name="name" value="${h(d.name)}" required></div>
+    <div><label>Téléphone</label><input name="phone" type="tel" value="${h(d.phone)}"></div><div><label>Email</label><input name="email" type="email" value="${h(d.email)}"></div>
+    <div><label>Localité</label><input name="city" value="${h(d.city)}"></div><div><label>Type</label><select name="type">${TYPES.map(t=>`<option ${t===d.type?'selected':''}>${t}</option>`).join('')}</select></div>
+    <div class="full"><label>Projet</label><input name="project" value="${h(d.project)}" required></div>
+    <div><label>Responsable</label><select name="owner">${owners.map(o=>`<option ${o===d.owner?'selected':''}>${h(o)}</option>`).join('')}</select></div>
+    <div><label>Étape</label><select name="status">${Object.keys(ST).map(s=>`<option value="${s}" ${s===d.status?'selected':''}>${stLabel(s)}</option>`).join('')}</select></div>
+    <div class="full"><label>Notes internes</label><textarea name="notes" style="min-height:70px">${h(d.notes)}</textarea></div>
+    <div class="full"><button class="primary">Enregistrer</button></div></form></div></details>
+    <details class="card" style="margin-top:14px"><summary>Historique</summary><div class="in hist">${d.history.map(x=>`<div>${h(x.text)}<br><small>${fdt(x.at)}${x.author?' · '+h(x.author):''}</small></div>`).join('')||'<p class="muted">—</p>'}</div></details>`;
+}
+function renderLead(){
+  const d=byId(current);
+  $('#main').innerHTML=`<button class="back" id="back">← Toutes les demandes</button>
+  <div class="fhead"><div><div class="eyebrow">${d.code} · ${h(d.source)} · reçue le ${fdate(d.received)}</div><h1>${h(d.name)}</h1><div class="muted">${h(d.project)}${d.city&&!String(d.project).includes(d.city)?' · '+h(d.city):''}</div>
+    <div class="contact">${d.phone?`<a href="tel:${h(d.phone.replace(/[^+\d]/g,''))}">📞 ${h(d.phone)}</a>`:''}${d.email?`<a href="mailto:${h(d.email)}">✉ ${h(d.email)}</a>`:''}</div></div>${stBadge(d.status)}</div>
+  ${nextStep(d)}
+  <div class="cols"><section><h2>Conversation</h2><div class="conv" id="conv">${convHtml(d)}</div>${composerHtml(d)}</section><aside>${infoHtml(d)}</aside></div>`;
+  bindLead(d);signLinks();
+  if(d.unread){sb.from('lead_messages').update({read:true}).eq('lead_id',d.id).eq('read',false).then(r=>{if(!r.error){d.messages.forEach(m=>m.read=true);d.unread=0;nav()}})}
+}
+// Liens de téléchargement signés (photos, PDF) préparés à l'avance : un simple clic les ouvre
+async function signLinks(){
+  const d=byId(current);const pdfA=$('#pdfA');if(pdfA&&d?.pdfPath){pdfA.dataset.sign='devis';pdfA.dataset.path=d.pdfPath}
+  const groups={};$$('[data-sign]').forEach(e=>(groups[e.dataset.sign]=groups[e.dataset.sign]||[]).push(e));
+  for(const[bucket,list]of Object.entries(groups)){
+    const paths=[...new Set(list.map(e=>e.dataset.path))];
+    const{data}=await sb.storage.from(bucket).createSignedUrls(paths,3600);
+    const map=Object.fromEntries((data||[]).filter(x=>x.signedUrl).map(x=>[x.path,x.signedUrl]));
+    list.forEach(e=>{const u=map[e.dataset.path];if(!u)return;e.href=u;e.classList.remove('hidden');const img=e.querySelector('img');if(img)img.src=u});
+  }
+}
+function fromTpl(d,t){return{tplId:t.id,subject:tpl(t.subject,d),body:tpl(t.body,d)}}
+function setCompose(d,o){compose={...compose,...o};const c=$('#composer');if(!c)return;c.outerHTML=composerHtml(d);bindComposer(d);$('#composer').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>$('#cBody')?.focus({preventScroll:true}),350)}
+function bindComposer(d){
+  $('#cTpl').onchange=e=>{const t=templates.find(x=>String(x.id)===e.target.value);if(!t)return;if($('#cBody').value.trim()&&!confirm('Remplacer le message en cours par ce modèle ?')){e.target.value=compose.tplId||'';return}setCompose(d,fromTpl(d,t))};
+  $('#cSub').oninput=e=>compose.subject=e.target.value;$('#cBody').oninput=e=>compose.body=e.target.value;
+  if($('#cCancelQ'))$('#cCancelQ').onclick=()=>setCompose(d,{quote:false});
+  $('#cSend').onclick=async e=>{const s=$('#cSub').value.trim(),b=$('#cBody').value,isQ=!!compose.quote;if(!s||!b.trim())return toast('Objet et message requis.');
+    if(!confirm(`Envoyer ${isQ?'le devis ':''}à ${d.email} ?`))return;e.target.disabled=true;e.target.textContent='Envoi…';
+    try{await api('/api/send-email',{leadId:d.id,subject:s,body:b,isQuote:isQ,isReminder:false});compose={};await loadAll();render();toast(isQ?'Devis envoyé à '+d.email:'Email envoyé à '+d.email)}catch(err){e.target.disabled=false;e.target.textContent='Envoyer';toast(err.message)}};
+}
+function bindLead(d){
+  $('#back').onclick=()=>{view='list';current=null;compose={};render()};
+  bindComposer(d);
+  $$('[data-reply]').forEach(b=>b.onclick=()=>{const m=d.messages.find(x=>String(x.id)===b.dataset.reply);setCompose(d,{tplId:'',subject:/^re\s*:/i.test(m.subject||'')?m.subject:'Re: '+(m.subject||d.project),body:tpl('Bonjour {prenom},\n\n\n\nBelle journée,\n{signature}',d),quote:false})});
+  $$('[data-act]').forEach(b=>b.onclick=async()=>{const a=b.dataset.act;
+    if(a==='ack'){const t=templates.find(x=>x.kind==='accuse');setCompose(d,{...fromTpl(d,t),quote:false})}
+    else if(a==='write'){const t=templates.find(x=>x.kind==='libre');setCompose(d,t?{...fromTpl(d,t),quote:false}:{tplId:'',subject:'Votre projet '+d.project,body:tpl('Bonjour {prenom},\n\n\n\nBelle journée,\n{signature}',d),quote:false})}
+    else if(a==='quote')quoteBuilder(d);
+    else if(a==='won'){if(await persist(d,{status:'Devis accepté',suspended:true},'Devis accepté 🎉'))render()}
+    else if(a==='lost'){if(!confirm('Marquer ce devis comme refusé ? Les relances s’arrêtent.'))return;if(await persist(d,{status:'Devis refusé',suspended:true},'Devis refusé'))render()}
+    else if(a==='talk'){if(await persist(d,{status:'Échange en cours'},'Étape : En discussion (contact hors plateforme)'))render()}
+    else if(a==='reopen'){if(await persist(d,{status:d.sent?'Devis envoyé':'Échange en cours',suspended:false},'Dossier rouvert'))render()}});
+  $('#infoF').onsubmit=async e=>{e.preventDefault();const v=Object.fromEntries(new FormData(e.target));const log=v.status!==d.status?'Étape : '+stLabel(v.status):'Infos client modifiées';
+    if(v.status==='Devis envoyé'&&!d.sent)v.sent=today();if(['Devis accepté','Devis refusé'].includes(v.status))v.suspended=true;
+    if(await persist(d,v,log)){render();toast('Enregistré')}};
+}
+
+// ---------- créateur de devis ----------
+function quoteBuilder(d){
+  const q=quoteOf(d);
+  const st={quoteId:q?.id||null,lines:q?JSON.parse(JSON.stringify(q.lines)):[{description:d.type&&d.type!=='Autre'?d.type+' – ':'',qty:1,unit:'pièce',price:''}],vat:q?Number(q.vat_rate):Number(S.quote_vat_default??21),deposit:q?Number(q.deposit_pct):Number(S.quote_deposit_pct??30),validity:Number(S.quote_validity_days||30),notes:q?.notes||''};
+  const tot=()=>{const ht=st.lines.reduce((s,l)=>s+nb(l.qty)*nb(l.price),0);const tva=ht*st.vat/100;return{ht,tva,ttc:ht+tva,dep:(ht+tva)*st.deposit/100}};
+  const drawTotals=()=>{const t=tot();$('#qTot').innerHTML=`<div><span>Total HTVA</span><b>${eur(t.ht,2)}</b></div><div><span>TVA ${st.vat} %</span><b>${eur(t.tva,2)}</b></div><div class="grand"><span>Total TVAC</span><span>${eur(t.ttc,2)}</span></div>${st.deposit>0?`<div class="muted"><span>Acompte ${st.deposit} %</span><span>${eur(t.dep,2)}</span></div>`:''}`;
+    st.lines.forEach((l,i)=>{const e=$(`#lt${i}`);if(e)e.textContent=eur(nb(l.qty)*nb(l.price),2)})};
+  const drawLines=()=>{$('#qLines').innerHTML=`<div class="ql qhead"><span>Description</span><span>Qté</span><span class="u">Unité</span><span>Prix HTVA</span><span class="tot">Total</span><span></span></div>`+st.lines.map((l,i)=>`<div class="ql"><textarea data-i="${i}" data-k="description" placeholder="Ex. Portail battant 2 vantaux, acier thermolaqué RAL 7016, 3,50 × 1,60 m">${h(l.description)}</textarea><input data-i="${i}" data-k="qty" inputmode="decimal" value="${h(l.qty)}"><select class="u" data-i="${i}" data-k="unit">${UNITS.map(u=>`<option ${u===l.unit?'selected':''}>${u}</option>`).join('')}</select><input data-i="${i}" data-k="price" inputmode="decimal" placeholder="0,00" value="${h(l.price)}"><div class="tot" id="lt${i}"></div><button class="ghost del" data-del="${i}" title="Supprimer la ligne">✕</button></div>`).join('');
+    $$('#qLines [data-k]').forEach(e=>e.oninput=e.onchange=()=>{st.lines[e.dataset.i][e.dataset.k]=e.value;drawTotals()});
+    $$('#qLines [data-del]').forEach(b=>b.onclick=()=>{if(st.lines.length>1){st.lines.splice(Number(b.dataset.del),1);drawLines()}});drawTotals()};
+  $('#modalC').innerHTML=`<div class="mh"><div><div class="eyebrow">${q?'Modifier le devis '+h(q.number):'Nouveau devis'}</div><h2 style="margin:4px 0 0">${h(d.name)} · ${h(d.project)}</h2></div><button class="ghost" data-close>✕</button></div>
+  <div class="mb"><div class="qlines" id="qLines"></div><p><button id="qAdd">+ Ajouter une ligne</button></p>
+  <div class="f2" style="margin-top:16px"><div><label>TVA</label><select id="qVat"><option value="21">21 % (standard)</option><option value="6">6 % (rénovation d’un logement de plus de 10 ans)</option><option value="0">0 % (autoliquidation)</option></select></div>
+  <div><label>Acompte à la commande (%)</label><input id="qDep" inputmode="decimal" value="${st.deposit}"></div>
+  <div class="full"><label>Remarques sur ce devis (couleur, délai, options…)</label><textarea id="qNotes" style="min-height:70px">${h(st.notes)}</textarea></div></div>
+  <div class="qtotals" id="qTot"></div>
+  <div class="cbar" style="margin-top:20px"><span class="muted small">Validité ${st.validity} jours · coordonnées et conditions : Paramètres.</span><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="qPrev">👁 Aperçu PDF</button><button class="primary big" id="qGo">Enregistrer et préparer l’email</button></div></div><p id="qLink" class="small"></p></div>`;
+  $('#qVat').value=String(st.vat);$('#qVat').onchange=e=>{st.vat=Number(e.target.value);drawTotals()};$('#qDep').oninput=e=>{st.deposit=nb(e.target.value);drawTotals()};$('#qNotes').oninput=e=>st.notes=e.target.value;
+  $('#qAdd').onclick=()=>{st.lines.push({description:'',qty:1,unit:'pièce',price:''});drawLines();$$('#qLines textarea').pop().focus()};
+  $('#modal [data-close]').onclick=()=>$('#modal').close();
+  drawLines();$('#modal').showModal();
+  const save=async()=>{const r=await api('/api/quote',{leadId:d.id,quoteId:st.quoteId,lines:st.lines,vatRate:st.vat,depositPct:st.deposit,validityDays:st.validity,notes:st.notes});st.quoteId=r.quote.id;return r};
+  $('#qPrev').onclick=async e=>{const w=window.open('about:blank','_blank');e.target.disabled=true;try{const r=await save();if(w)w.location=r.url;else $('#qLink').innerHTML=`<a href="${h(r.url)}" target="_blank" rel="noopener">Ouvrir le PDF du devis ${h(r.quote.number)}</a>`;await loadAll()}catch(err){if(w)w.close();toast(err.message)}e.target.disabled=false};
+  $('#qGo').onclick=async e=>{e.target.disabled=true;try{const r=await save();await loadAll();$('#modal').close();const dd=byId(d.id);const t=templates.find(x=>x.kind==='devis');view='lead';current=d.id;compose={...(t?fromTpl(dd,t):{subject:'Votre devis '+r.quote.number,body:''}),quote:true};render();$('#composer').scrollIntoView({behavior:'smooth',block:'center'});toast('Devis '+r.quote.number+' prêt : relisez l’email puis envoyez.')}catch(err){e.target.disabled=false;toast(err.message)}};
+}
+
+// ---------- nouvelle demande ----------
+function addLead(){
+  $('#modalC').innerHTML=`<div class="mh"><h2 style="margin:0">Ajouter une demande</h2><button class="ghost" data-close>✕</button></div><div class="mb"><form id="nf" class="f2">
+  <div class="full"><label>Nom du client</label><input name="name" required></div><div><label>Téléphone</label><input name="phone" type="tel"></div><div><label>Email</label><input name="email" type="email"></div>
+  <div><label>Localité</label><input name="city"></div><div><label>Type</label><select name="type">${TYPES.map(t=>`<option>${t}</option>`).join('')}</select></div>
+  <div class="full"><label>Demande du client</label><textarea name="message"></textarea></div><div class="full"><button class="primary big">Créer</button></div></form></div>`;
+  $('#modal').showModal();$('#modal [data-close]').onclick=()=>$('#modal').close();
+  $('#nf').onsubmit=async e=>{e.preventDefault();const v=Object.fromEntries(new FormData(e.target));v.project=(v.type==='Autre'?'Demande':v.type)+(v.city?' – '+v.city:'');
+    const{data,error}=await sb.from('leads').insert(toDb({...v,status:'Nouvelle demande',source:'Ajout manuel',owner:'Ferroxwood',received:today()})).select().single();if(error)return toast('Erreur : '+error.message);
+    await sb.from('lead_events').insert({lead_id:data.id,text:'Demande ajoutée manuellement',author:session.user.email});$('#modal').close();await loadAll();openLead(data.id)}}
+
+// ---------- modèles d'emails ----------
+const KIND={accuse:'Accusé de réception',libre:'Message',devis:'Envoi du devis',relance1:'Relance 1 · automatique',relance2:'Relance 2 · automatique'};
+function renderTemplates(){
+  $('#main').innerHTML=`<div class="lhead"><h1>Modèles d’emails</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><button id="nA">+ Accusé de réception</button><button id="nL">+ Message</button></div></div>
+  <p class="hint">Ces textes pré-remplissent vos emails : vous pouvez toujours les modifier avant l’envoi. Variables : <span class="vars"><code>{prenom}</code><code>{nom}</code><code>{type}</code><code>{projet}</code><code>{ville}</code><code>{ref}</code><code>{montant}</code><code>{date_envoi}</code><code>{signature}</code></span></p>
+  <div class="tpl">${templates.map(t=>`<div class="tplc"><div class="th"><div><span class="badge">${KIND[t.kind]||t.kind}</span> <b>${h(t.name)}</b><div class="muted small">${h(t.subject)}</div></div><button data-edit="${t.id}">Modifier</button></div><form class="stack hidden" data-form="${t.id}" style="margin-top:12px">
+    <div><label>Nom du modèle</label><input name="name" value="${h(t.name)}" required></div><div><label>Objet</label><input name="subject" value="${h(t.subject)}" required></div><div><label>Message</label><textarea name="body" style="min-height:220px" required>${h(t.body)}</textarea></div>
+    <div style="display:flex;gap:8px;justify-content:space-between"><button class="primary">Enregistrer</button>${['accuse','libre'].includes(t.kind)?`<button type="button" class="danger" data-delt="${t.id}">Supprimer</button>`:''}</div></form></div>`).join('')||'<div class="card empty">Aucun modèle : exécutez la migration 4 dans Supabase.</div>'}</div>`;
+  $$('[data-edit]').forEach(b=>b.onclick=()=>$(`[data-form="${b.dataset.edit}"]`).classList.toggle('hidden'));
+  $$('[data-form]').forEach(f=>f.onsubmit=async e=>{e.preventDefault();const v=Object.fromEntries(new FormData(f));const{error}=await sb.from('email_templates').update({...v,updated_at:new Date().toISOString()}).eq('id',f.dataset.form);if(error)return toast('Erreur : '+error.message);Object.assign(templates.find(t=>String(t.id)===f.dataset.form),v);toast('Modèle enregistré');renderTemplates()});
+  $$('[data-delt]').forEach(b=>b.onclick=async()=>{if(!confirm('Supprimer ce modèle ?'))return;const{error}=await sb.from('email_templates').delete().eq('id',b.dataset.delt);if(error)return toast(error.message);templates=templates.filter(t=>String(t.id)!==b.dataset.delt);renderTemplates()});
+  const create=async kind=>{const{data,error}=await sb.from('email_templates').insert({kind,name:kind==='accuse'?'Nouvel accusé de réception':'Nouveau message',subject:'Votre projet – Ferroxwood',body:'Bonjour {prenom},\n\n\n\nBelle journée,\n{signature}',position:kind==='accuse'?5:15}).select().single();if(error)return toast(error.message);templates.push(data);renderTemplates();$(`[data-form="${data.id}"]`).classList.remove('hidden')};
+  $('#nA').onclick=()=>create('accuse');$('#nL').onclick=()=>create('libre');
+}
+
+// ---------- paramètres (admin) ----------
+function renderSettings(){
+  const f=(l,n,v,t='text',cls='')=>`<div class="${cls}"><label>${l}</label><input name="${n}" type="${t}" value="${h(v??'')}"></div>`;
+  const conn=(t,ok,detail)=>`<div style="padding:10px 0;border-bottom:1px solid var(--line)"><b>${t}</b> <span class="badge ${ok?'b-won':'b-lost'}">${ok?'OK':'À configurer'}</span><div class="muted small">${detail}</div></div>`;
+  const lastImp=db.filter(d=>d.source!=='Ajout manuel').map(d=>d.createdAt).sort().pop();
+  $('#main').innerHTML=`<h1 style="margin-bottom:18px">Paramètres</h1><form id="sf" class="stack">
+  <div class="card"><h2>Entreprise (en-tête des devis)</h2><div class="f2">${f('Nom','company_name',S.company_name)}${f('N° de TVA','company_vat',S.company_vat)}<div class="full"><label>Adresse</label><textarea name="company_address" style="min-height:60px">${h(S.company_address)}</textarea></div>${f('Téléphone','company_phone',S.company_phone)}${f('Email','company_email',S.company_email)}${f('IBAN','company_iban',S.company_iban)}${f('Site web','company_website',S.company_website)}</div></div>
+  <div class="card"><h2>Devis</h2><div class="f2"><div><label>TVA par défaut</label><select name="quote_vat_default">${[21,6,0].map(v=>`<option value="${v}" ${Number(S.quote_vat_default)===v?'selected':''}>${v} %</option>`).join('')}</select></div>${f('Acompte par défaut (%)','quote_deposit_pct',S.quote_deposit_pct,'number')}${f('Validité (jours)','quote_validity_days',S.quote_validity_days,'number')}<div class="full"><label>Conditions (imprimées sur chaque devis)</label><textarea name="quote_conditions" style="min-height:90px">${h(S.quote_conditions)}</textarea></div></div></div>
+  <div class="card"><h2>Relances et emails</h2><div class="f2"><div class="full"><label style="display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink)"><input type="checkbox" name="auto_send" style="width:auto" ${S.auto_send?'checked':''}> Envoyer les relances automatiquement</label></div>${f('1re relance : jours après l’envoi du devis','first_delay',S.first_delay,'number')}${f('2e relance : jours après la 1re','second_delay',S.second_delay,'number')}<div class="full"><label style="display:flex;gap:8px;align-items:center;font-size:14px;color:var(--ink)"><input type="checkbox" name="attach_pdf" style="width:auto" ${S.attach_pdf?'checked':''}> Joindre le PDF du devis aux relances</label></div><div class="full"><label>Signature des emails</label><textarea name="signature" style="min-height:70px">${h(S.signature)}</textarea></div>${f('Récap quotidien envoyé à','notify_email',S.notify_email,'text','full')}</div></div>
+  <div><button class="primary big">Enregistrer les paramètres</button></div></form>
+  <div class="card" style="margin-top:14px"><h2>Connexions</h2>${conn('Envoi des emails',cfg.mail,cfg.mail?'Expéditeur : '+h(cfg.mailFrom):'RESEND_API_KEY / MAIL_FROM manquants sur Vercel.')}${conn('Réception des réponses',cfg.inbound,cfg.inbound?'Adresse de réponse : …@'+h(cfg.replyDomain):'REPLY_DOMAIN / RESEND_WEBHOOK_SECRET manquants.')}${conn('Import Google Sheet',!!lastImp,'Dernier lead importé : '+(fdt(lastImp)||'—'))}${conn('Relances quotidiennes',!!S.last_cron_at,'Dernier passage : '+(fdt(S.last_cron_at)||'jamais'))}<p><button id="run">Lancer les relances dues maintenant</button></p></div>`;
+  $('#sf').onsubmit=async e=>{e.preventDefault();const fd=new FormData(e.target),v=Object.fromEntries(fd);
+    const row={...v,auto_send:fd.has('auto_send'),attach_pdf:fd.has('attach_pdf'),first_delay:Math.max(1,Number(v.first_delay)||4),second_delay:Math.max(1,Number(v.second_delay)||7),quote_vat_default:Number(v.quote_vat_default),quote_deposit_pct:Number(v.quote_deposit_pct)||0,quote_validity_days:Math.max(1,Number(v.quote_validity_days)||30),notify_email:(v.notify_email||'').trim()||null};
+    const{error}=await sb.from('settings').update(row).eq('id',1);if(error)return toast('Erreur : '+error.message);Object.assign(S,row);toast('Paramètres enregistrés')};
+  $('#run').onclick=async e=>{e.target.disabled=true;try{const r=await api('/api/cron/reminders');await loadAll();toast(`${r.due} relance(s) due(s) · ${r.sent} envoyée(s)`+(r.failed?` · ${r.failed} échec(s)`:''))}catch(err){toast(err.message)}e.target.disabled=false};
+}
+
+// ---------- utilisateurs (admin) ----------
+const genPwd=()=>{const c='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';const a=new Uint32Array(12);crypto.getRandomValues(a);return Array.from(a,x=>c[x%c.length]).join('')};
+async function renderUsers(){
+  if(!users){$('#main').innerHTML='<p class="muted">Chargement…</p>';try{users=(await api('/api/users',{action:'list'})).members}catch(e){users=[];toast(e.message)}}
+  if(view!=='users')return;
+  $('#main').innerHTML=`<h1 style="margin-bottom:18px">Utilisateurs</h1><div class="cols"><div class="card"><h2>Équipe</h2><div class="stack">${users.map(u=>`<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px;flex-wrap:wrap"><div><b>${h(u.name||'—')}</b><div class="muted small">${h(u.email)} · ${u.last_sign_in_at?'connecté le '+fdt(u.last_sign_in_at):'jamais connecté'}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap"><select data-role="${h(u.email)}" style="width:auto" ${u.email===me.email?'disabled':''}><option value="commercial" ${u.role!=='admin'?'selected':''}>Commercial</option><option value="admin" ${u.role==='admin'?'selected':''}>Administrateur</option></select><button data-pwd="${h(u.email)}">Mot de passe</button>${u.email===me.email?'':`<button class="danger" data-rm="${h(u.email)}">Retirer</button>`}</div></div>`).join('')}</div><p class="muted small">Administrateur : tout, y compris paramètres et utilisateurs. Commercial : demandes, devis, modèles.</p></div>
+  <div class="card"><h2>Ajouter une personne</h2><form id="uf" class="stack"><div><label>Prénom et nom</label><input name="name" required></div><div><label>Email</label><input name="email" type="email" required></div><div><label>Rôle</label><select name="role"><option value="commercial">Commercial</option><option value="admin">Administrateur</option></select></div><div><label>Mot de passe provisoire</label><input name="password" value="${genPwd()}" minlength="8"></div><button class="primary">Ajouter</button></form><div id="ud"></div></div></div>`;
+  const showCred=(email,pwd)=>{const t=`Bonjour,\n\nVoici ton accès à la plateforme Ferroxwood :\n${location.origin}\nEmail : ${email}${pwd?'\nMot de passe : '+pwd+'\n\nTu peux le changer après connexion (bouton « Mot de passe » en haut).':''}`;$('#ud').innerHTML=`<div class="next" style="margin-top:14px;display:block"><b>C’est fait.</b> Message à lui envoyer :<textarea id="ct" style="margin-top:8px;min-height:150px">${h(t)}</textarea><button id="cc" style="margin-top:8px">Copier</button></div>`;$('#cc').onclick=()=>navigator.clipboard.writeText($('#ct').value).then(()=>toast('Copié'))};
+  $('#uf').onsubmit=async e=>{e.preventDefault();const v=Object.fromEntries(new FormData(e.target));v.email=v.email.trim().toLowerCase();try{await api('/api/users',{action:'create',...v});users=null;await loadAll();await renderUsers();showCred(v.email,v.password)}catch(err){toast(err.message)}};
+  $$('[data-role]').forEach(s=>s.onchange=async()=>{try{await api('/api/users',{action:'update',email:s.dataset.role,role:s.value});toast('Rôle mis à jour')}catch(err){toast(err.message)}users=null;renderUsers()});
+  $$('[data-rm]').forEach(b=>b.onclick=async()=>{if(!confirm('Retirer l’accès de '+b.dataset.rm+' ?'))return;try{await api('/api/users',{action:'remove',email:b.dataset.rm});toast('Accès retiré')}catch(err){toast(err.message)}users=null;await loadAll();renderUsers()});
+  $$('[data-pwd]').forEach(b=>b.onclick=async()=>{const p=prompt('Nouveau mot de passe (8 caractères minimum) :',genPwd());if(!p)return;try{await api('/api/users',{action:'set_password',email:b.dataset.pwd,password:p});showCred(b.dataset.pwd,p)}catch(err){toast(err.message)}});
+}
+function myPassword(){
+  $('#modalC').innerHTML=`<div class="mh"><h2 style="margin:0">Mon mot de passe</h2><button class="ghost" data-close>✕</button></div><div class="mb"><form id="pf" class="stack"><div><label>Nouveau mot de passe</label><input name="p1" type="password" minlength="8" required autocomplete="new-password"></div><div><label>Confirmer</label><input name="p2" type="password" minlength="8" required autocomplete="new-password"></div><button class="primary">Enregistrer</button></form></div>`;
+  $('#modal').showModal();$('#modal [data-close]').onclick=()=>$('#modal').close();
+  $('#pf').onsubmit=async e=>{e.preventDefault();const v=Object.fromEntries(new FormData(e.target));if(v.p1!==v.p2)return toast('Les deux mots de passe ne correspondent pas.');const{error}=await sb.auth.updateUser({password:v.p1});if(error)return toast(error.message);$('#modal').close();toast('Mot de passe modifié')}}
+
+// ---------- rafraîchissement automatique ----------
+async function refresh(){if(!session||!me||$('#modal').open)return;if(view==='lead'&&(($('#cBody')?.value||'').trim()||document.activeElement?.closest('form,#composer')))return;if(view==='settings'||view==='templates'||view==='users')return;await loadAll();render()}
+setInterval(()=>{if(document.visibilityState==='visible')refresh()},60000);
+window.addEventListener('focus',()=>{if(Date.now()-lastLoad>30000)refresh()});
+boot();
+</script></body></html>
