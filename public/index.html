@@ -25,7 +25,7 @@ h1{font-size:28px;margin:0;letter-spacing:-.5px}h2{font-size:17px;margin:0 0 14p
 .rows{display:grid;gap:8px}.lead{display:grid;grid-template-columns:1fr auto;gap:12px;text-align:left;padding:15px 18px;border-radius:12px;background:#fff;width:100%}.lead:hover{border-color:#cfcabb;background:#fff}
 .lead .nm{font-weight:650;font-size:16px}.lead .pj{color:#444}.lead .mt{color:var(--muted);font-size:13px}.lead .rt{display:flex;flex-direction:column;align-items:flex-end;gap:6px;justify-content:center}
 .badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;background:#eef0ec;color:#55605a;white-space:nowrap}
-.b-new{background:var(--sand2);color:#8a6a12}.b-talk{background:#e6eef3;color:#3e6273}.b-sent{background:var(--orange2);color:var(--orange)}.b-won{background:var(--green2);color:var(--green)}.b-lost{background:var(--red2);color:var(--red)}.b-alert{background:var(--orange);color:#fff}.lead.hot{border-color:var(--orange);box-shadow:inset 4px 0 0 var(--orange)}
+.b-new{background:var(--sand2);color:#8a6a12}.b-talk{background:#e6eef3;color:#3e6273}.b-sent{background:var(--orange2);color:var(--orange)}.b-won{background:var(--green2);color:var(--green)}.b-lost{background:var(--red2);color:var(--red)}.b-alert{background:var(--orange);color:#fff}.lead{grid-template-columns:1fr auto 36px;cursor:pointer;border:1px solid var(--line)}.trash{border:0;background:transparent;padding:6px;font-size:17px;opacity:.35;align-self:center;border-radius:8px}.trash:hover{opacity:1;background:var(--red2)}.lead.hot{border-color:var(--orange);box-shadow:inset 4px 0 0 var(--orange)}
 .empty{padding:40px;text-align:center;color:var(--muted)}
 .back{border:0;background:transparent;padding:4px 0;color:var(--muted);margin-bottom:10px}
 .fhead{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px}.eyebrow{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
@@ -55,7 +55,7 @@ dialog{border:0;border-radius:16px;padding:0;width:min(900px,96vw);max-height:94
 .tpl{display:grid;gap:10px}.tplc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}.tplc .th{display:flex;justify-content:space-between;gap:10px;align-items:center}
 .vars code{background:#efeee8;border-radius:5px;padding:1px 6px;font-size:12px;margin-right:4px}
 @media(max-width:900px){.cols{grid-template-columns:1fr}.ql{grid-template-columns:1fr 64px 96px 34px}.ql .u,.ql .tot{display:none}}
-@media(max-width:640px){.topin{flex-wrap:wrap;gap:8px;padding:8px 14px}.me span{display:none}main{padding:18px 14px 80px}h1{font-size:23px}.lead{grid-template-columns:1fr}.lead .rt{flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap}.f2{grid-template-columns:1fr}.composer .crow{grid-template-columns:1fr}.bub{max-width:96%}.lhead input{max-width:none}}
+@media(max-width:640px){.topin{flex-wrap:wrap;gap:8px;padding:8px 14px}.me span{display:none}main{padding:18px 14px 80px}h1{font-size:23px}.lead{grid-template-columns:1fr 36px}.lead .trash{grid-column:2;grid-row:1}.lead .rt{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap}.f2{grid-template-columns:1fr}.composer .crow{grid-template-columns:1fr}.bub{max-width:96%}.lhead input{max-width:none}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 </head><body>
@@ -206,7 +206,9 @@ function renderList(){
   $$('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderList()});
   $('#q').oninput=e=>{query=e.target.value;const p=e.target.selectionStart;renderList();$('#q').focus();$('#q').setSelectionRange(p,p)};
   $('#add').onclick=addLead;
-  $$('[data-open]').forEach(b=>b.onclick=()=>openLead(b.dataset.open));
+  $$('[data-open]').forEach(b=>{b.onclick=e=>{if(e.target.closest('[data-delrow]'))return;openLead(b.dataset.open)};b.onkeydown=e=>{if(e.key==='Enter')openLead(b.dataset.open)}});
+  $$('[data-delrow]').forEach(b=>b.onclick=async e=>{e.stopPropagation();const d=byId(b.dataset.delrow);if(!d||!confirm(`Supprimer la demande ${d.code} (${d.name}) ?`))return;
+    if(await persist(d,{deletedAt:new Date().toISOString(),suspended:true},'Demande supprimée')){db=db.filter(x=>x.id!==d.id);db.forEach(x=>x.dups=(x.dups||[]).filter(y=>y.id!==d.id));nav();renderList();toast('Demande supprimée')}});
 }
 function rowHtml(d){
   const badges=[];
@@ -216,7 +218,7 @@ function rowHtml(d){
   if(d.dups?.length)badges.push(`<span class="badge" title="Même email ou téléphone que ${h(d.dups.map(x=>x.code).join(', '))}">⚠ Doublon possible</span>`);
   if(d.status==='Devis envoyé'){const du=due(d);badges.push(`<span class="muted small">${h(d.ref)} · ${eur(d.amount)}${du?` · relance le ${fdate(du)}`:''}</span>`)}
   else if(d.status==='Devis accepté'&&d.amount)badges.push(`<span class="muted small">${eur(d.amount)}</span>`);
-  return `<button class="lead ${d.unread||d.waiting?'hot':''}" data-open="${d.id}"><div><div class="nm">${h(d.name)}</div><div class="pj">${h(d.project)}</div><div class="mt">${h(d.source)} · reçue ${ago(d.received)}${d.owner&&d.owner!=='Ferroxwood'?' · '+h(d.owner):''}${d.messages.length?` · dernier message : <b>${d.messages[d.messages.length-1].direction==='in'?'le client':'vous'}</b> ${fdt(d.lastAt)}`:''}</div></div><div class="rt">${badges.join('')}</div></button>`;
+  return `<div class="lead ${d.unread||d.waiting?'hot':''}" data-open="${d.id}" role="button" tabindex="0"><div><div class="nm">${h(d.name)}</div><div class="pj">${h(d.project)}</div><div class="mt">${h(d.source)} · reçue ${ago(d.received)}${d.owner&&d.owner!=='Ferroxwood'?' · '+h(d.owner):''}${d.messages.length?` · dernier message : <b>${d.messages[d.messages.length-1].direction==='in'?'le client':'vous'}</b> ${fdt(d.lastAt)}`:''}</div></div><div class="rt">${badges.join('')}</div><button class="trash" data-delrow="${d.id}" title="Supprimer cette demande" aria-label="Supprimer la demande de ${h(d.name)}">🗑</button></div>`;
 }
 
 // ---------- fiche ----------
