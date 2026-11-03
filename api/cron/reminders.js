@@ -17,7 +17,8 @@ export default async function handler(req, res) {
 
     const { data: s, error: se } = await db.from('settings').select('*').eq('id', 1).single();
     if (se) throw se;
-    const { data: leads, error: le } = await db.from('leads').select('*');
+    const { data: leads0, error: le } = await db.from('leads').select('*');
+    const leads = (leads0 || []).filter(l => !l.deleted_at);
     const { data: templates } = await db.from('email_templates').select('*');
     if (le) throw le;
 

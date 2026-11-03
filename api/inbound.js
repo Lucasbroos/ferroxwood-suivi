@@ -82,7 +82,7 @@ export async function POST(request) {
       if (data && String(data.id).replace(/-/g, '').startsWith(p.idPrefix)) { lead = data; break; }
     }
     if (!lead && from) {
-      const { data } = await db.from('leads').select('*').eq('email', from).order('created_at', { ascending: false }).limit(1);
+      const { data } = await db.from('leads').select('*').eq('email', from).is('deleted_at', null).order('created_at', { ascending: false }).limit(1);
       lead = data?.[0] || null;
     }
 
