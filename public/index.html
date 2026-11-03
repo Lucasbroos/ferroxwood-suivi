@@ -251,7 +251,8 @@ function composerHtml(d){
   const opts=groups.map(([k,l])=>{const ts=templates.filter(t=>t.kind===k);return ts.length?`<optgroup label="${h(l)}">${ts.map(t=>`<option value="${t.id}" ${String(compose.tplId)===String(t.id)?'selected':''}>${h(t.name)}</option>`).join('')}</optgroup>`:''}).join('');
   return `<div class="composer" id="composer"><div class="crow"><select id="cTpl"><option value="">Choisir un modèle…</option>${opts}</select><input id="cSub" placeholder="Objet" value="${h(compose.subject||'')}"></div>
     <textarea id="cBody" placeholder="Écrivez au client…">${h(compose.body||'')}</textarea>
-    <div class="cbar"><div>${compose.quote&&d.pdfName?`<span class="chip">📄 ${h(d.pdfName)} joint</span> `:''}<span class="muted small">À : ${h(d.email||'—')}</span></div><div style="display:flex;gap:8px">${compose.quote?'<button id="cCancelQ" class="ghost small">Ne pas joindre le devis</button>':''}<button class="primary" id="cSend" ${can?'':'disabled'}>${compose.quote?'Envoyer le devis':'Envoyer'}</button></div></div>
+    <div class="atts" id="cFiles">${(compose.files||[]).map((f,i)=>`<span class="chip">📎 ${h(f.name)} <small class="muted">${f.size<1048576?Math.max(1,Math.round(f.size/1024))+' Ko':(f.size/1048576).toFixed(1)+' Mo'}</small><button type="button" class="ghost small" data-rmf="${i}" title="Retirer" style="padding:0 4px">✕</button></span>`).join('')}</div>
+    <div class="cbar"><div>${compose.quote&&d.pdfName?`<span class="chip">📄 ${h(d.pdfName)} joint</span> `:''}<label class="file" style="cursor:pointer;margin:0;font-size:13px;color:var(--ink)">📎 Joindre un fichier<input type="file" id="cFile" multiple hidden></label> <span class="muted small">À : ${h(d.email||'—')}</span></div><div style="display:flex;gap:8px">${compose.quote?'<button id="cCancelQ" class="ghost small">Ne pas joindre le devis</button>':''}<button class="primary" id="cSend" ${can?'':'disabled'}>${compose.quote?'Envoyer le devis':'Envoyer'}</button></div></div>
     ${!cfg.mail?'<p class="small muted">L’envoi d’emails n’est pas configuré.</p>':''}</div>`;
 }
 function infoHtml(d){
@@ -296,9 +297,16 @@ function bindComposer(d){
   $('#cTpl').onchange=e=>{const t=templates.find(x=>String(x.id)===e.target.value);if(!t)return;if($('#cBody').value.trim()&&!confirm('Remplacer le message en cours par ce modèle ?')){e.target.value=compose.tplId||'';return}setCompose(d,fromTpl(d,t))};
   $('#cSub').oninput=e=>compose.subject=e.target.value;$('#cBody').oninput=e=>compose.body=e.target.value;
   if($('#cCancelQ'))$('#cCancelQ').onclick=()=>setCompose(d,{quote:false});
+  $('#cFile').onchange=e=>{const add=[...e.target.files];const all=[...(compose.files||[]),...add];
+    if(all.reduce((t,f)=>t+f.size,0)>25*1048576)return toast('25 Mo maximum au total pour les pièces jointes.');
+    if(all.length>10)return toast('10 fichiers maximum.');
+    compose.subject=$('#cSub').value;compose.body=$('#cBody').value;setCompose(d,{files:all.map(f=>f.file?f:{file:f,name:f.name,size:f.size,type:f.type})})};
+  $$('[data-rmf]').forEach(b=>b.onclick=()=>{compose.subject=$('#cSub').value;compose.body=$('#cBody').value;const fs=[...(compose.files||[])];fs.splice(Number(b.dataset.rmf),1);setCompose(d,{files:fs})});
   $('#cSend').onclick=async e=>{const s=$('#cSub').value.trim(),b=$('#cBody').value,isQ=!!compose.quote;if(!s||!b.trim())return toast('Objet et message requis.');
-    if(!confirm(`Envoyer ${isQ?'le devis ':''}à ${d.email} ?`))return;e.target.disabled=true;e.target.textContent='Envoi…';
-    try{await api('/api/send-email',{leadId:d.id,subject:s,body:b,isQuote:isQ,isReminder:false});compose={};await loadAll();render();toast(isQ?'Devis envoyé à '+d.email:'Email envoyé à '+d.email)}catch(err){e.target.disabled=false;e.target.textContent='Envoyer';toast(err.message)}};
+    const nf=(compose.files||[]).length;
+    if(!confirm(`Envoyer ${isQ?'le devis ':''}à ${d.email}${nf?` avec ${nf} pièce(s) jointe(s)`:''} ?`))return;e.target.disabled=true;e.target.textContent='Envoi…';
+    try{const files=[];for(const f of compose.files||[]){if(!f.path){const path=`${d.id}/envoi-${Date.now()}-${f.name.replace(/[^\w.\-]+/g,'_').slice(-100)}`;const up=await sb.storage.from('pieces').upload(path,f.file,{contentType:f.type||'application/octet-stream'});if(up.error)throw Error('Envoi du fichier « '+f.name+' » impossible : '+up.error.message);f.path=path}files.push({path:f.path,name:f.name,type:f.type})}
+      await api('/api/send-email',{leadId:d.id,subject:s,body:b,isQuote:isQ,isReminder:false,files});compose={};await loadAll();render();toast(isQ?'Devis envoyé à '+d.email:'Email envoyé à '+d.email)}catch(err){e.target.disabled=false;e.target.textContent='Envoyer';toast(err.message)}};
 }
 function bindLead(d){
   $('#back').onclick=()=>{view='list';current=null;compose={};render()};
